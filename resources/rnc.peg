@@ -1,0 +1,61 @@
+namespace Nevkontakte\Phprnc;
+
+grammar RelaxNGCompact {
+    start SchemaFile = Literal / NsName / CName/ Inherit / NameClass / IdentifierOrKeyword / NCName / AnyName;
+
+    NameClass = (
+        Name
+        / "(" _ NameClass _ ")"
+        / ( NameClass _ "|" _ NameClass)
+        /(NsName ExceptNameClass?)
+        / (AnyName ExceptNameClass?)
+        ) {return "NameClass"; };
+
+    Name = IdentifierOrKeyword / CName;
+    ExceptNameClass = "-" _ NameClass;
+
+    DatatypeName = CName / "string" / "token";
+
+    DatatypeValue = Literal;
+    AnyURILiteral = Literal;
+    NamespaceURILiteral = Literal;
+
+    Inherit = "inherit" _ "=" _ IdentifierOrKeyword;
+
+    IdentifierOrKeyword = Identifier / Keyword;
+
+    Identifier = ((!Keyword) NCName) { return "identifier"; } / QuotedIdentifier;
+    QuotedIdentifier = "\\" NCName;
+
+    CName = NCName ":" NCName;
+    NsName = NCName ":*";
+    AnyName = "*";
+
+    // TODO: correct definition from here: http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName
+    NCName = $([a-zA-Z0-9._-]+);
+
+    Literal = LiteralSegment (_ "~" _ LiteralSegment)*;
+    LiteralSegment = '"'  $([^"\n]*) '"';
+
+    Keyword = ("attribute"
+              / "default"
+              / "datatypes"
+              / "div"
+              / "element"
+              / "empty"
+              / "external"
+              / "grammar"
+              / "include"
+              / "inherit"
+              / "list"
+              / "mixed"
+              / "namespace"
+              / "notAllowed"
+              / "parent"
+              / "start"
+              / "string"
+              / "text"
+              / "token") {return "keyword";};
+
+    _ = " "*;
+}

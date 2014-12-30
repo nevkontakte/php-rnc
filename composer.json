@@ -1,0 +1,19 @@
+{
+    "name": "nevkontakte/php-rnc",
+    "description": "Relax NG Compact Syntax library for PHP",
+    "require": {
+        "scato/phpeg": "~1.0",
+        "phpunit/phpunit": "4.4.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alexander Zhirov",
+            "email": "aleks@aradmin.org.ru"
+        }
+    ]
+}
